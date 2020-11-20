@@ -8,7 +8,7 @@
 
 #include "TCS34725.h"
 
-// Power function
+// Power Function
 float powf(const float x, const float y) 
 {
   return (float)(pow((double)x, (double)y));
@@ -32,19 +32,19 @@ void TCS34725::write8(uint8_t reg, uint32_t value)
 uint8_t TCS34725::read8(uint8_t reg) 
 {
   _wire->beginTransmission(_i2caddr);
-  #if ARDUINO >= 100
-    _wire->write(TCS34725_COMMAND_BIT | reg);
-  #else
-    _wire->send(TCS34725_COMMAND_BIT | reg);
-  #endif
-    _wire->endTransmission();
+#if ARDUINO >= 100
+  _wire->write(TCS34725_COMMAND_BIT | reg);
+#else
+  _wire->send(TCS34725_COMMAND_BIT | reg);
+#endif
+  _wire->endTransmission();
 
   _wire->requestFrom(_i2caddr, (uint8_t)1);
-  #if ARDUINO >= 100
-    return _wire->read();
-  #else
-    return _wire->receive();
-  #endif
+#if ARDUINO >= 100
+  return _wire->read();
+#else
+  return _wire->receive();
+#endif
 }
 
 // Reads a 16 bit values over I2C
@@ -54,24 +54,24 @@ uint16_t TCS34725::read16(uint8_t reg)
   uint16_t t;
 
   _wire->beginTransmission(_i2caddr);
-  #if ARDUINO >= 100
-    _wire->write(TCS34725_COMMAND_BIT | reg);
-  #else
-    _wire->send(TCS34725_COMMAND_BIT | reg);
-  #endif
-    _wire->endTransmission();
+#if ARDUINO >= 100
+  _wire->write(TCS34725_COMMAND_BIT | reg);
+#else
+  _wire->send(TCS34725_COMMAND_BIT | reg);
+#endif
+  _wire->endTransmission();
 
   _wire->requestFrom(_i2caddr, (uint8_t)2);
-  #if ARDUINO >= 100
-    t = _wire->read();
-    x = _wire->read();
-  #else
-    t = _wire->receive();
-    x = _wire->receive();
-  #endif
-    x <<= 8;
-    x |= t;
-    return x;
+#if ARDUINO >= 100
+  t = _wire->read();
+  x = _wire->read();
+#else
+  t = _wire->receive();
+  x = _wire->receive();
+#endif
+  x <<= 8;
+  x |= t;
+  return x;
 }
 
 // Enables the device
@@ -80,26 +80,21 @@ void TCS34725::enable()
   write8(TCS34725_ENABLE, TCS34725_ENABLE_PON);
   delay(3);
   write8(TCS34725_ENABLE, TCS34725_ENABLE_PON | TCS34725_ENABLE_AEN);
-  delay(700);
+
+  switch (_tcs34725IntegrationTime) 
+  {
+  case TCS34725_INTEGRATIONTIME_2_4MS:
+    delay(3);
+    break;
+  case TCS34725_INTEGRATIONTIME_700MS:
+    delay(700);
+    break;
+  }
 }
 
-// Disables the device (lower power sleep mode)
-void TCS34725::disable() 
-{
-  // Turn the device off to save power
-  uint8_t reg = 0;
-  reg = read8(TCS34725_ENABLE);
-  write8(TCS34725_ENABLE, reg & ~(TCS34725_ENABLE_PON | TCS34725_ENABLE_AEN));
-}
 
-/*!
- *  @brief  Constructor
- *  @param  it
- *          Integration Time
- *  @param  gain
- *          Gain
- */
-TCS34725::TCS34725(tcs34725IntegrationTime_t it,tcs34725Gain_t gain) 
+// Constructor
+TCS34725::TCS34725(tcs34725IntegrationTime_t it, tcs34725Gain_t gain) 
 {
   _tcs34725Initialised = false;
   _tcs34725IntegrationTime = it;
@@ -111,6 +106,7 @@ boolean TCS34725::begin(uint8_t addr)
 {
   _i2caddr = addr;
   _wire = &Wire;
+
   return init();
 }
 
@@ -119,6 +115,7 @@ boolean TCS34725::begin(uint8_t addr, TwoWire *theWire)
 {
   _i2caddr = addr;
   _wire = theWire;
+
   return init();
 }
 
@@ -127,23 +124,55 @@ boolean TCS34725::begin()
 {
   _i2caddr = TCS34725_ADDRESS;
   _wire = &Wire;
+
   return init();
 }
 
-// Initialization
+// Part of begin making sure we are connected
 boolean TCS34725::init() 
 {
   _wire->begin();
-  // Make sure we're actually connected
+
   uint8_t x = read8(TCS34725_ID);
   if ((x != 0x44) && (x != 0x10)) 
   {
     return false;
   }
   _tcs34725Initialised = true;
-  // Note: by default, the device is in power down mode on bootup
+
+  // Set default integration time and gain
+  setIntegrationTime(_tcs34725IntegrationTime);
+  setGain(_tcs34725Gain);
+
   enable();
+
   return true;
+}
+
+// Sets the integration time for the TC34725
+void TCS34725::setIntegrationTime(tcs34725IntegrationTime_t it) 
+{
+  if (!_tcs34725Initialised)
+    begin();
+
+  // Update the timing register
+  write8(TCS34725_ATIME, it);
+
+  // Update value placeholders
+  _tcs34725IntegrationTime = it;
+}
+
+// Adjusts the gain on the TCS34725
+void TCS34725::setGain(tcs34725Gain_t gain) 
+{
+  if (!_tcs34725Initialised)
+    begin();
+
+  // Update the timing register
+  write8(TCS34725_CONTROL, gain);
+
+  // Update value placeholders
+  _tcs34725Gain = gain;
 }
 
 // Reads the raw red, green, blue and clear channel values
@@ -154,5 +183,10 @@ void TCS34725::getRawData(uint16_t *r, uint16_t *g, uint16_t *b)
   *r = read16(TCS34725_RDATAL);
   *g = read16(TCS34725_GDATAL);
   *b = read16(TCS34725_BDATAL);
-  delay(700);
+
+  // Set a delay for the integration time
+  if (_tcs34725IntegrationTime = TCS34725_INTEGRATIONTIME_700MS) 
+  {
+    delay(700);
+  }
 }
