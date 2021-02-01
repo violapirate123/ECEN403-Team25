@@ -32,16 +32,14 @@ int greenOut = 0;
 int blueOut = 0;
 /* Color Sensor End */
 
-
 /* Sound Sensor */
-int CrackSensor = A1; // assigns crack sensor circuit to analog pin 1.
-int FirstCrack = 3; // assigns output signal for first crack to digital pin 3.
-int SecondCrack = 4; //assigns output signal for second crack to digital pin 4.
-bool firstcrackregistered = false; // boolean that is set to true once the coffee roasting process is in the "First crack stage".
-bool secondcrackregistered = false; // boolean that is set to true once the coffee roasting process is in the "Second crack stage".
-int crackcount = 0; //integer value to count for number of crack sounds.
-int secondcrackcount = 0; //integer value to count for number of crack sounds at second crack.
 /* Sound Sensor End */
+
+/* Thermal Sensor Functions */
+/* Thermal Sensor Functions End */
+
+/* Motor Functions */
+/* Motor Functions End */
 
 
 void setup() {
@@ -90,11 +88,15 @@ void loop(void) {
 
   if (buttonLstate == LOW)
   { 
+    coffeebeansdetected();
     colorlight();
-    soundlight();
-    if (colorcorrect == 1 || soundcorrect = 1)
+    // ADD IN SOUND FUNCTION soundlight();
+    // ADD IN THERMAL FUNCTION
+    // ADD IN MOTOR FUNCTION
+    if (colorcorrect == 1 || //soundcorrect = 1 || thermalcorrect)
     {
       ______
+      //ADD IN MOTOR FUNCTION cooldown();
     }
     else
     {
@@ -104,11 +106,15 @@ void loop(void) {
   }
   else if (buttonMstate == LOW)
   {
+    coffeebeansdetected();
     colormedium();
-    soundmedium();
-    if (colorcorrect == 1)
+    // ADD IN SOUND FUNCTION soundmedium();
+    // ADD IN THERMAL FUNCTION
+    // ADD IN MOTOR FUNCTION
+    if (colorcorrect == 1 || //soundcorrect = 1 || thermalcorrect)
     {
       ______
+      //ADD IN MOTOR FUNCTION cooldown();
     }
     else
     {
@@ -116,13 +122,17 @@ void loop(void) {
       colormedium();
     }
   }
-  else if (buttonDstate == LOW)
+  else (buttonDstate == LOW)
   {
+    coffeebeansdetected();
     colordark();
-    sounddark();
-    if (colorcorrect == 1 )
+    // ADD IN SOUND FUNCTION sounddark();
+    // ADD IN THERMAL FUNCTION
+    // ADD IN MOTOR FUNCTION
+    if (colorcorrect == 1 || //soundcorrect = 1 || thermalcorrect)
     {
       ______
+      //ADD IN MOTOR FUNCTION cooldown();
     }
     else
     {
@@ -130,15 +140,10 @@ void loop(void) {
       colordark();
     }
   }
-  else if (buttonCstate == LOW)
-  {
-
-  }
-  else
-  {
-    delay(5000);
-  }
 }
+
+
+
 
 
 /* Color Sensor Functions */
@@ -588,7 +593,7 @@ void coffeebeansdetected(void) {
            greenOut == 1 &&
            blueOut == 0)
   {
-    Serial.print("Not Roasted\n");
+    return;
   }
   else if (redOut == 0 &&              // Not Roasted (Overlapping Blue with Light)
            greenOut == 0 &&
@@ -618,3 +623,11 @@ void coffeebeansdetected(void) {
 
 /* Sound Sensor Functions */
 /* Sound Sensor Functions End */
+
+/* Thermal Sensor Functions */
+/* Thermal Sensor Functions End */
+
+/* Cool Down Function */
+//void cooldown(void) {
+//}
+/* Cool Down Function End */
