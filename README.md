@@ -1,10 +1,9 @@
-# ECEN404-Team25
-i-Joe Home Coffee Roaster
+# ECEN404-Team25  i-Joe Home Coffee Roaster
 
-  Integrated Code:
+  # Integrated Code:
     SensorCode.ino
   
-  Color Sensor Codes:
+  # Color Sensor Codes:
     RoasterRGBCode
     Adafruit Code
         Adafruit_TCS34725.cpp
@@ -14,5 +13,5 @@ i-Joe Home Coffee Roaster
         TCS34725.cpp
         TCS34725.h
       
-  Sound Sensor Codes:
+  # Sound Sensor Codes:
     Sound Sensor Subsystem
