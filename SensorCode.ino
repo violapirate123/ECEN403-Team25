@@ -147,6 +147,7 @@ void loop(void) {
 
 
 /* Color Sensor Functions */
+/* COLOR LIGHT FUNCTION */
 void colorlight(void) {
   uint16_t r, g, b;
   tcs.getRawData(&r, &g, &b); // Getting RGB Values
@@ -257,6 +258,8 @@ void colorlight(void) {
   return colorcorrect;
 }
 
+
+/* COLOR MEDIUM FUNCTION */
 void colormedium(void) {
   uint16_t r, g, b;
   tcs.getRawData(&r, &g, &b); // Getting RGB Values
@@ -385,6 +388,8 @@ void colormedium(void) {
   return colorcorrect;
 }
 
+
+/* COLOR DARK FUNCTION */
 void colordark(void) {
   uint16_t r, g, b;
   tcs.getRawData(&r, &g, &b); // Getting RGB Values
@@ -496,6 +501,7 @@ void colordark(void) {
   return colorcorrect;
 }
 
+/* COFFEE BEANS DETECTED FUNCTION */
 void coffeebeansdetected(void) {
   uint16_t r, g, b;
   tcs.getRawData(&r, &g, &b); // Getting RGB Values
