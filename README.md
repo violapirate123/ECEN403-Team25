@@ -1,7 +1,7 @@
 # ECEN404-Team25  i-Joe Home Coffee Roaster
 
   # Integrated Code:
-    - SensorCode.ino
+    - MainCode.ino
   
   # Color Sensor Codes:
     - RoasterRGBCode
