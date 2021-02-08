@@ -3,12 +3,33 @@
 //#include "colorcode"
 
 /* Pushbutton */
-const int buttonlight = 2;   // pushbutton for light roast
-const int buttonmedium = 3;  // pushbutton for medium roast
-const int buttondark = 4;    // pushbutton for dark roast
-const int buttoncool = 5;    // pushbutton for cool down
+const int light_button = 2; //set button pin
+const int medium_button = 3;
+const int dark_button = 4;
+int light_state = 0;
+int medium_state = 0;
+int dark_state = 0;
 /* Pushbutton End */
 
+
+/* Temperature set up */
+const int wire = 5; //heating
+int TC_Pin = A0; //analog to digital converter
+int raw_adc = 0;
+#define AREF 3.3 // voltage used by amplifier
+
+float reading, voltage, temp;
+
+float get_voltage(int raw_adc) 
+{ //turns ADC reading to voltage
+  //Serial.print(raw_adc);
+  return raw_adc * (AREF / 1023);
+}
+float get_temp(float voltage)
+{ //turned voltage to temp
+  return (voltage - .5) / .01;
+}
+/* Temperature set up end */
 
 /* Color Sensor */
 // Initialise with specific int time and gain values
@@ -32,25 +53,26 @@ int greenOut = 0;
 int blueOut = 0;
 /* Color Sensor End */
 
+
 /* Sound Sensor */
+int CrackSensor = A1; // assigns crack sensor circuit to analog pin 1.
+int FirstCrack = 3; // assigns output signal for first crack to digital pin 3.
+int SecondCrack = 4; //assigns output signal for second crack to digital pin 4.
+bool firstcrackregistered = false; // boolean that is set to true once the coffee roasting process is in the "First crack stage".
+bool secondcrackregistered = false; // boolean that is set to true once the coffee roasting process is in the "Second crack stage".
+int crackcount = 0; //integer value to count for number of crack sounds.
+int secondcrackcount = 0; //integer value to count for number of crack sounds at second crack.
 /* Sound Sensor End */
-
-/* Thermal Sensor Functions */
-/* Thermal Sensor Functions End */
-
-/* Motor Functions */
-/* Motor Functions End */
 
 
 void setup() {
   /*  Pushbutton Set Up */
   // Set up the pushbutton pins to be an input
-  pinMode(buttonlight, INPUT);
-  pinMode(buttonmedium, INPUT);
-  pinMode(buttondark, INPUT);
-  pinMode(buttoncool, INPUT);
+  pinMode(light_button, INPUT);
+  pinMode(medium_button, INPUT);
+  pinMode(dark_button, INPUT);
+  pinMode(wire, OUTPUT);
   /* Pushbutton Set Up End*/
-
 
   /* Color Sensor Set Up */
   // Check if Color Sensor Connected
@@ -66,37 +88,42 @@ void setup() {
   // Check if Color Sensor Connected End
   /* Color Sensor Set Up End*/
 
-
   /* Sound Sensor Set Up */
   pinMode (CrackSensor, INPUT); // sets crack sensor as input.
   Serial.begin(9600); // this is test code that allows input for crack sensor to be printed for testing.
   pinMode (FirstCrack, OUTPUT);// sets firstcrack signal as output.
   pinMode (SecondCrack, OUTPUT); // sets secondcrack signal as output.
   /* Sound Sensor Set Up End */
+
+  Serial.begin(9600);
 }
 
 void loop(void) {
-  int buttonLstate, buttonMstate, buttonDstate, buttonCstate;  // pushbutton states variables
   int colorcorrect, soundcorrect;
   
-  buttonLstate = digitalRead(buttonlight);
-  buttonMstate = digitalRead(buttonmedium);
-  buttonDstate = digitalRead(buttondark);
-  buttonCstate = digitalRead(buttoncool);
+  //read state
+  light_button_state = digitalRead(light_button);
+  medium_button_state = digitalRead(medium_button);
+  dark_button_state = digitalRead(dark_button);
 
   coffeebeansdetected();
 
-  if (buttonLstate == LOW)
+  if (light_button_state == HIGH)
   { 
-    coffeebeansdetected();
+    while (light_button_state == HIGH)
+    { //keep button on
+      digitalWrite(wire, HIGH); //turns on wire
+      //temp
+      reading = analogRead(TC_Pin);
+      voltage = get_voltage(reading);
+      temp = get_temp(voltage);
+      if (temp == 200){ //we can mess with this i needed a place holder to turn off the wire
+        digitalWrite(wire, LOW);
+    }
     colorlight();
-    // ADD IN SOUND FUNCTION soundlight();
-    // ADD IN THERMAL FUNCTION
-    // ADD IN MOTOR FUNCTION
-    if (colorcorrect == 1 || //soundcorrect = 1 || thermalcorrect)
+    if (colorcorrect == 1 || soundcorrect = 1)
     {
       ______
-      //ADD IN MOTOR FUNCTION cooldown();
     }
     else
     {
@@ -104,17 +131,22 @@ void loop(void) {
       colorlight();
     }
   }
-  else if (buttonMstate == LOW)
+  else if (medium_button_state == HIGH)
   {
-    coffeebeansdetected();
+    while (medium_button_state == HIGH)
+    { //keep button on
+      digitalWrite(wire, HIGH); //turns on wire
+      //temp
+      reading = analogRead(TC_Pin);
+      voltage = get_voltage(reading);
+      temp = get_temp(voltage);
+      if (temp == 215){ //we can mess with this i needed a place holder to turn off the wire
+        digitalWrite(wire, LOW);
+    }
     colormedium();
-    // ADD IN SOUND FUNCTION soundmedium();
-    // ADD IN THERMAL FUNCTION
-    // ADD IN MOTOR FUNCTION
-    if (colorcorrect == 1 || //soundcorrect = 1 || thermalcorrect)
+    if (colorcorrect == 1 || )
     {
       ______
-      //ADD IN MOTOR FUNCTION cooldown();
     }
     else
     {
@@ -122,17 +154,22 @@ void loop(void) {
       colormedium();
     }
   }
-  else (buttonDstate == LOW)
+  else if (dark_button_state == HIGH)
   {
-    coffeebeansdetected();
+    while (dark_button_state == HIGH)
+    { //keep button on
+      digitalWrite(wire, HIGH); //turns on wire
+      //temp
+      reading = analogRead(TC_Pin);
+      voltage = get_voltage(reading);
+      temp = get_temp(voltage);
+      if (temp == 235){ //we can mess with this i needed a place holder to turn off the wire
+        digitalWrite(wire, LOW);
+    }
     colordark();
-    // ADD IN SOUND FUNCTION sounddark();
-    // ADD IN THERMAL FUNCTION
-    // ADD IN MOTOR FUNCTION
-    if (colorcorrect == 1 || //soundcorrect = 1 || thermalcorrect)
+    else if (colorcorrect == 1 || )
     {
       ______
-      //ADD IN MOTOR FUNCTION cooldown();
     }
     else
     {
@@ -143,11 +180,7 @@ void loop(void) {
 }
 
 
-
-
-
 /* Color Sensor Functions */
-/* COLOR LIGHT FUNCTION */
 void colorlight(void) {
   uint16_t r, g, b;
   tcs.getRawData(&r, &g, &b); // Getting RGB Values
@@ -258,8 +291,6 @@ void colorlight(void) {
   return colorcorrect;
 }
 
-
-/* COLOR MEDIUM FUNCTION */
 void colormedium(void) {
   uint16_t r, g, b;
   tcs.getRawData(&r, &g, &b); // Getting RGB Values
@@ -388,8 +419,6 @@ void colormedium(void) {
   return colorcorrect;
 }
 
-
-/* COLOR DARK FUNCTION */
 void colordark(void) {
   uint16_t r, g, b;
   tcs.getRawData(&r, &g, &b); // Getting RGB Values
@@ -501,7 +530,6 @@ void colordark(void) {
   return colorcorrect;
 }
 
-/* COFFEE BEANS DETECTED FUNCTION */
 void coffeebeansdetected(void) {
   uint16_t r, g, b;
   tcs.getRawData(&r, &g, &b); // Getting RGB Values
@@ -599,7 +627,7 @@ void coffeebeansdetected(void) {
            greenOut == 1 &&
            blueOut == 0)
   {
-    return;
+    Serial.print("Not Roasted\n");
   }
   else if (redOut == 0 &&              // Not Roasted (Overlapping Blue with Light)
            greenOut == 0 &&
@@ -626,14 +654,3 @@ void coffeebeansdetected(void) {
   }
 }
 /* Color Sensor Functions End */
-
-/* Sound Sensor Functions */
-/* Sound Sensor Functions End */
-
-/* Thermal Sensor Functions */
-/* Thermal Sensor Functions End */
-
-/* Cool Down Function */
-//void cooldown(void) {
-//}
-/* Cool Down Function End */
