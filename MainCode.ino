@@ -31,7 +31,7 @@ float get_temp(float voltage)
 }
 /* Temperature set up end */
 
-/* Color Sensor */
+/* Color Sensor */ 
 // Initialise with specific int time and gain values
 TCS34725 tcs = TCS34725(INTEGRATIONTIME_700MS, GAIN_1X);
 
