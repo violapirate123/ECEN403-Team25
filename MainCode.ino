@@ -55,13 +55,53 @@ int blueOut = 0;
 
 
 /* Sound Sensor */
-int CrackSensor = A1; // assigns crack sensor circuit to analog pin 1.
+#include "arduinoFFT.h" 
+
+#define Sampling_Frequency 2048
+
+arduinoFFT FFT = arduinoFFT();
+
+unsigned int samplingprd;
+unsigned long microsec;
+
+int CrackSensor = A0; // assigns crack sensor circuit to analog pin 1.
 int FirstCrack = 3; // assigns output signal for first crack to digital pin 3.
 int SecondCrack = 4; //assigns output signal for second crack to digital pin 4.
 bool firstcrackregistered = false; // boolean that is set to true once the coffee roasting process is in the "First crack stage".
 bool secondcrackregistered = false; // boolean that is set to true once the coffee roasting process is in the "Second crack stage".
 int crackcount = 0; //integer value to count for number of crack sounds.
 int secondcrackcount = 0; //integer value to count for number of crack sounds at second crack.
+double imaginary[128];
+double data[128];
+int i = 0;
+int value;
+void setup() {
+  Serial.begin(9600);
+  samplingprd = round(1000000*(1/Sampling_Frequency));
+  pinMode (CrackSensor, INPUT); // sets crack sensor as input.
+  pinMode (FirstCrack, OUTPUT);// sets firstcrack signal as output.
+  pinMode (SecondCrack, OUTPUT); // sets secondcrack signal as output.
+
+}
+
+void loop() {
+  for (i = 0;i < 128; i++){
+    microsec = micros();
+   value = analogRead(CrackSensor);
+   data[i] = value;
+   imaginary[i] = 0;
+   while(micros() < (microsec + samplingprd)){
+    //dont take samples
+   }
+  }
+  FFT.Windowing(data, 128, FFT_WIN_TYP_HAMMING, FFT_FORWARD);
+  FFT.Compute(data, imaginary, 128, FFT_FORWARD);
+  FFT.ComplexToMagnitude(data, imaginary, 128);
+
+  double peak = FFT.MajorPeak(data, 128, Sampling_Frequency);
+  Serial.println(peak);
+  delay(5000);
+ }
 /* Sound Sensor End */
 
 
