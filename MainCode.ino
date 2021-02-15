@@ -12,7 +12,7 @@ int dark_state = 0;
 /* Pushbutton End */
 
 
-/* Temperature set up */
+/* Temperature */
 const int wire = 5; //heating
 int TC_Pin = A0; //analog to digital converter
 int raw_adc = 0;
@@ -29,7 +29,7 @@ float get_temp(float voltage)
 { //turned voltage to temp
   return (voltage - .5) / .01;
 }
-/* Temperature set up end */
+/* Temperature */
 
 /* Color Sensor */ 
 // Initialise with specific int time and gain values
@@ -56,14 +56,12 @@ int blueOut = 0;
 
 /* Sound Sensor */
 #include "arduinoFFT.h" 
-
 #define Sampling_Frequency 2048
 
 arduinoFFT FFT = arduinoFFT();
 
 unsigned int samplingprd;
 unsigned long microsec;
-
 int CrackSensor = A0; // assigns crack sensor circuit to analog pin 1.
 int FirstCrack = 3; // assigns output signal for first crack to digital pin 3.
 int SecondCrack = 4; //assigns output signal for second crack to digital pin 4.
@@ -75,35 +73,7 @@ double imaginary[128];
 double data[128];
 int i = 0;
 int value;
-void setup() {
-  Serial.begin(9600);
-  samplingprd = round(1000000*(1/Sampling_Frequency));
-  pinMode (CrackSensor, INPUT); // sets crack sensor as input.
-  pinMode (FirstCrack, OUTPUT);// sets firstcrack signal as output.
-  pinMode (SecondCrack, OUTPUT); // sets secondcrack signal as output.
-
-}
-
-void loop() {
-  for (i = 0;i < 128; i++){
-    microsec = micros();
-   value = analogRead(CrackSensor);
-   data[i] = value;
-   imaginary[i] = 0;
-   while(micros() < (microsec + samplingprd)){
-    //dont take samples
-   }
-  }
-  FFT.Windowing(data, 128, FFT_WIN_TYP_HAMMING, FFT_FORWARD);
-  FFT.Compute(data, imaginary, 128, FFT_FORWARD);
-  FFT.ComplexToMagnitude(data, imaginary, 128);
-
-  double peak = FFT.MajorPeak(data, 128, Sampling_Frequency);
-  Serial.println(peak);
-  delay(5000);
- }
 /* Sound Sensor End */
-
 
 void setup() {
   /*  Pushbutton Set Up */
@@ -129,8 +99,8 @@ void setup() {
   /* Color Sensor Set Up End*/
 
   /* Sound Sensor Set Up */
+  samplingprd = round(1000000*(1/Sampling_Frequency));
   pinMode (CrackSensor, INPUT); // sets crack sensor as input.
-  Serial.begin(9600); // this is test code that allows input for crack sensor to be printed for testing.
   pinMode (FirstCrack, OUTPUT);// sets firstcrack signal as output.
   pinMode (SecondCrack, OUTPUT); // sets secondcrack signal as output.
   /* Sound Sensor Set Up End */
@@ -694,3 +664,25 @@ void coffeebeansdetected(void) {
   }
 }
 /* Color Sensor Functions End */
+
+    
+/* Sound Sensor Functions */
+void sound(void) {
+  for (i = 0;i < 128; i++){
+    microsec = micros();
+   value = analogRead(CrackSensor);
+   data[i] = value;
+   imaginary[i] = 0;
+   while(micros() < (microsec + samplingprd)){
+    //dont take samples
+   }
+  }
+  FFT.Windowing(data, 128, FFT_WIN_TYP_HAMMING, FFT_FORWARD);
+  FFT.Compute(data, imaginary, 128, FFT_FORWARD);
+  FFT.ComplexToMagnitude(data, imaginary, 128);
+
+  double peak = FFT.MajorPeak(data, 128, Sampling_Frequency);
+  Serial.println(peak);
+  delay(5000);
+ }
+/* Sound Sensor Functions End */
