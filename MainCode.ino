@@ -109,7 +109,7 @@ void setup() {
 }
 
 void loop(void) {
-  int colorcorrect, soundcorrect;
+  int colorcorrect, sound1correct, sound2correct;
   
   //read state
   light_button_state = digitalRead(light_button);
@@ -118,6 +118,7 @@ void loop(void) {
 
   coffeebeansdetected();
 
+  // Light Roast
   if (light_button_state == HIGH)
   { 
     while (light_button_state == HIGH)
@@ -141,6 +142,7 @@ void loop(void) {
       colorlight();
     }
   }
+  // Medium Roast
   else if (medium_button_state == HIGH)
   {
     while (medium_button_state == HIGH)
@@ -164,6 +166,7 @@ void loop(void) {
       colormedium();
     }
   }
+  // Dark Roast
   else if (dark_button_state == HIGH)
   {
     while (dark_button_state == HIGH)
@@ -191,6 +194,7 @@ void loop(void) {
 
 
 /* Color Sensor Functions */
+// Color Light Roast
 void colorlight(void) {
   uint16_t r, g, b;
   tcs.getRawData(&r, &g, &b); // Getting RGB Values
@@ -301,6 +305,7 @@ void colorlight(void) {
   return colorcorrect;
 }
 
+// Color Medium Roast
 void colormedium(void) {
   uint16_t r, g, b;
   tcs.getRawData(&r, &g, &b); // Getting RGB Values
@@ -428,7 +433,8 @@ void colormedium(void) {
   }
   return colorcorrect;
 }
-
+    
+// Color Dark Roast
 void colordark(void) {
   uint16_t r, g, b;
   tcs.getRawData(&r, &g, &b); // Getting RGB Values
@@ -667,7 +673,7 @@ void coffeebeansdetected(void) {
 
     
 /* Sound Sensor Functions */
-void sound(void) {
+void soundfirst(void) {
   for (i = 0;i < 128; i++){//loops 128 times to take 128 samples of ADC from electret microphone.
     microsec = micros();// sets microsec variable to the amount of time processor takes to process information.
    value = analogRead(CrackSensor);//takes sound sensor data and assigns it to premade variable "value".
@@ -703,3 +709,12 @@ void sound(void) {
  }
 }
 /* Sound Sensor Functions End */
+    
+/* Cool Down Function */
+/* Cool Down Function End */
+    
+/* Motor Function */
+/* Motor Function End */
+    
+/* Thermal Function */
+/* Thermal Function End */
