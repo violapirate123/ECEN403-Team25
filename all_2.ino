@@ -24,12 +24,12 @@ int greenOut = 0;
 int blueOut = 0;
 /* Color Sensor End */
 
-int colorcorrect, sound1correct, sound2correct;
+bool colorcorrect, sound1correct, sound2correct;
 
 /* Color Sensor Functions */
 
 // Color Light Roast
-void colorlight(void) {
+bool colorlight() {
   uint16_t r, g, b;
   tcs.getRawData(&r, &g, &b); // Getting RGB Values
 
@@ -42,6 +42,8 @@ void colorlight(void) {
   red = constrain(redV, 0, 255);
   green = constrain(greenV, 0, 255);
   blue = constrain(blueV, 0, 255);
+  
+  while(colorcorrect == false){
 
   // IF ELSE STATEMENT RED
   if (83 <= red && red <= 130)          // Not Roasted
@@ -112,31 +114,33 @@ void colorlight(void) {
       greenOut == 1 &&
       blueOut == 1)
   {
-    colorcorrect = 1;
+    colorcorrect = true;
   }
   else if (redOut == 0 &&              // Light Roast (Overlapping Red with Not)
            greenOut == 1 &&
            blueOut == 1)
   {
-    colorcorrect = 1;       
+    colorcorrect = true;       
   }
   else if (redOut == 1 &&              // Light Roast (Overlapping Green with Not)
            greenOut == 0 &&
            blueOut == 1)
   {
-    colorcorrect = 1;
+    colorcorrect = true;
   }
   else if (redOut == 1 &&              // Light Roast (Overlapping Blue with Not)
            greenOut == 1 &&
            blueOut == 0)
   {
-    colorcorrect = 1;
+    colorcorrect = true;
   }
   else
   {
-    colorcorrect = 0;
+    colorcorrect = false;
   }
+ }
   return colorcorrect;
+ 
 }
 /*
 // Color Medium Roast
@@ -551,7 +555,7 @@ int value;
 /* Sound Sensor End */
 
 /* Sound Sensor Functions */
-void soundfirst(void) {
+bool soundfirst(void) {
   Serial.begin(9600);
   for (i = 0;i < 128; i++){//loops 128 times to take 128 samples of ADC from electret microphone.
     microsec = micros();// sets microsec variable to the amount of time processor takes to process information.
@@ -569,8 +573,8 @@ void soundfirst(void) {
   double peak = FFT.MajorPeak(data, 128, Sampling_Frequency);//the peak found by the transform is set equal to "peak" variable.
   Serial.println(peak);//this code is to test peaks
   delay(2000);//delay to observe output well.
-
-  if((200 <= peak)&&(300 >= peak)){ // registers a specific frequency that is converted to a digital number and identifies the crack sound.
+  while(firstcrackregistered == false){
+  if((800 <= peak)&&(1000 >= peak)){ // registers a specific frequency that is converted to a digital number and identifies the crack sound.
     crackcount = crackcount + 1; //increments value of crack sound number everytime desired frequency is detected by the microcontroller.
   }
   else{ //else statement to keep count for first crack the same.
@@ -585,7 +589,48 @@ void soundfirst(void) {
 
   else{ // else statement when first crack boolean is set to false.
   digitalWrite(FirstCrack, LOW); //keeps the LED for first crack on while the boolean for first crack remains false.
+  }
  }
+  return firstcrackregistered;
+}
+
+bool soundsecond(void) {
+  Serial.begin(9600);
+  for (i = 0;i < 128; i++){//loops 128 times to take 128 samples of ADC from electret microphone.
+    microsec = micros();// sets microsec variable to the amount of time processor takes to process information.
+   value = analogRead(CrackSensor);//takes sound sensor data and assigns it to premade variable "value".
+   data[i] = value;// places the analog to digital values in the array "data"
+   imaginary[i] = 0; //sets imaginary values to 0.
+   while(micros() < (microsec + samplingprd)){//allows for a fixed sampling time depending on speed of microprocessor.
+    //dont take samples while this is happening to allow processing time to catch up to sampling data.
+   }
+  }
+  FFT.Windowing(data, 128, FFT_WIN_TYP_HAMMING, FFT_FORWARD);//first part of FFT 
+  FFT.Compute(data, imaginary, 128, FFT_FORWARD);//computational part of FFT
+  FFT.ComplexToMagnitude(data, imaginary, 128);//complex magnitude part of FFT
+
+  double peak = FFT.MajorPeak(data, 128, Sampling_Frequency);//the peak found by the transform is set equal to "peak" variable.
+  Serial.println(peak);//this code is to test peaks
+  delay(2000);//delay to observe output well.
+  while(secondcrackregistered == false){
+  if((14000 <= peak)&&(15500 >= peak)){ // registers a specific frequency that is converted to a digital number and identifies the crack sound.
+    secondcrackcount = secondcrackcount + 1; //increments value of crack sound number everytime desired frequency is detected by the microcontroller.
+  }
+  else{ //else statement to keep count for first crack the same.
+    secondcrackcount = secondcrackcount; //keeps the count for firstcrack the same.
+  }
+  if(crackcount >= 7){ // if 7 CLEAR cracks are heard, the boolean "firstcrackregistered" is set to true.
+    secondcrackregistered = true; //boolean is set to true with given condition.
+  }
+  if(secondcrackregistered){ //first crack is successfully registered.
+  digitalWrite(SecondCrack, HIGH); // LED for first crack stays constantly on when the boolean for first crack is set to true.
+  } 
+
+  else{ // else statement when first crack boolean is set to false.
+  digitalWrite(SecondCrack, LOW); //keeps the LED for first crack on while the boolean for first crack remains false.
+  }
+ }
+  return secondcrackregistered;
 }
 /* Sound Sensor Functions End */
 
