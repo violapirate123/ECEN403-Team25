@@ -29,7 +29,7 @@ bool colorcorrect, sound1correct, sound2correct;
 /* Color Sensor Functions */
 
 // Color Light Roast
-bool colorlight() {
+bool colorlight(void) {
   uint16_t r, g, b;
   tcs.getRawData(&r, &g, &b); // Getting RGB Values
 
