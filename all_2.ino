@@ -1,4 +1,3 @@
-
 /*Color Sensor*/
 #include <Wire.h>
 #include "TCS34725.h"
@@ -144,7 +143,7 @@ bool colorlight(void) {
 }
 /*
 // Color Medium Roast
-void colormedium(void) {
+bool colormedium(void) {
   uint16_t r, g, b;
   tcs.getRawData(&r, &g, &b); // Getting RGB Values
 
@@ -157,6 +156,8 @@ void colormedium(void) {
   red = constrain(redV, 0, 255);
   green = constrain(greenV, 0, 255);
   blue = constrain(blueV, 0, 255);
+
+  while(colorcorrect == false){
 
   // IF ELSE STATEMENT RED
   if (83 <= red && red <= 130)          // Not Roasted
@@ -227,19 +228,19 @@ void colormedium(void) {
       greenOut == 2 &&
       blueOut == 2)
   {
-    colorcorrect = 1;
+    colorcorrect = true;
   }
   else if (redOut == 0 &&              // Medium Roast (Overlapping Red with Not)
            greenOut == 2 &&
            blueOut == 2)
   {
-    colorcorrect = 1;
+    colorcorrect = true;
   }
   else if (redOut == 2 &&             // Medium Roast (Overlapping Green with Not)
            greenOut == 0 &&
            blueOut == 2)
   {
-    colorcorrect = 1;
+    colorcorrect = true;
   }
   else if (redOut == 2 &&             // Medium Roast (Overlapping Blue with Not)
            greenOut == 2 &&
@@ -251,29 +252,30 @@ void colormedium(void) {
            greenOut == 2 &&
            blueOut == 2)
   {
-    colorcorrect = 1;
+    colorcorrect = true;
   }
   else if (redOut == 2 &&             // Medium Roast (Overlapping Green with Dark)
            greenOut == 3 &&
            blueOut == 2)
   {
-    colorcorrect = 1;
+    colorcorrect = true;
   }
   else if (redOut == 2 &&             // Medium Roast (Overlapping Blue with Dark)
           greenOut == 2 &&
           blueOut == 3)
   {
-    colorcorrect = 1;
+    colorcorrect = true;
   }
   else
   {
-    colorcorrect = 0;
+    colorcorrect = false;
   }
+ }
   return colorcorrect;
 }
     
 // Color Dark Roast
-void colordark(void) {
+bool colordark(void) {
   uint16_t r, g, b;
   tcs.getRawData(&r, &g, &b); // Getting RGB Values
 
@@ -286,6 +288,8 @@ void colordark(void) {
   red = constrain(redV, 0, 255);
   green = constrain(greenV, 0, 255);
   blue = constrain(blueV, 0, 255);
+
+  while(colorcorrect == false){
 
   // IF ELSE STATEMENT RED
   if (83 <= red && red <= 130)          // Not Roasted
@@ -356,34 +360,35 @@ void colordark(void) {
       greenOut == 3 &&
       blueOut == 3)
   {
-    colorcorrect = 1;
+    colorcorrect = true;
   }
 
   else if (redOut == 2 &&             // Dark Roast (Overlapping Red with Medium)
            greenOut == 3 &&
            blueOut == 3)
   {
-    colorcorrect = 1;
+    colorcorrect = true;
   }
   else if (redOut == 3 &&             // Dark Roast (Overlapping Green with Medium)
            greenOut == 2 &&
            blueOut == 3)
   {
-    colorcorrect = 1;
+    colorcorrect = true;
   }
   else if (redOut == 3 &&            // Dark Roast (Overlapping Blue with Medium)
            greenOut == 3 &&
            blueOut == 2)
   {
-    colorcorrect = 1;
+    colorcorrect = true;
   }
   else
   {
-    colorcorrect = 0;
+    colorcorrect = false;
   }
+ }
   return colorcorrect;
 }
-
+*/
 void coffeebeansdetected(void) {
   uint16_t r, g, b;
   tcs.getRawData(&r, &g, &b); // Getting RGB Values
@@ -462,10 +467,10 @@ void coffeebeansdetected(void) {
   {
     blueOut = 4;
   }
-}
+
 
   // IF ELSE STATEMENT ROAST
-/*  if (redOut == 0 && greenOut == 0 && blueOut == 0)                 // Not Roasted
+  if (redOut == 0 && greenOut == 0 && blueOut == 0)                 // Not Roasted
   {
     return;    
   }
@@ -503,8 +508,8 @@ void coffeebeansdetected(void) {
   {
     delay(5000);
     coffeebeansdetected();
-  }*/
-//}
+  }
+}
 /* Color Sensor Functions End */
 
 
@@ -680,6 +685,7 @@ void loop() {
   //if pushed
   if (light_button_state == HIGH)
   {
+     coffeebeansdetected();
     while (light_button_state == HIGH){ //keep button on
       digitalWrite(wire, HIGH); //turns on wire
       //temp
@@ -691,11 +697,13 @@ void loop() {
       }
       soundfirst();
       //colorlight();
-      //soundfirst();
+      //temperature has to be in the range of 300 degrees farenheit, we need the function for this.
+      
     }
   }
   if (medium_button_state == HIGH)
-  {
+  { 
+    coffeebeansdetected();
     while (medium_button_state == HIGH){ //keep button on
       digitalWrite(wire, HIGH); //turns on wire
       //temp
@@ -705,10 +713,14 @@ void loop() {
       if (temp == 215){ //we can mess with this i needed a place holder to turn off the wire
         digitalWrite(wire, LOW);
       }
+      soundfirst();
+      //colormedium();
+      //temperature has to be in the range of 410 degrees to 428 degrees farenheit, we need a function for this.
     }
   }
   if (dark_button_state == HIGH)
   {
+    coffeebeansdetected();
     while (dark_button_state == HIGH){ //keep button on
       digitalWrite(wire, HIGH); //turns on wire
       //temp
@@ -718,6 +730,10 @@ void loop() {
       if (temp == 235){ //we can mess with this i needed a place holder to turn off the wire
         digitalWrite(wire, LOW);
       }
+      soundfirst();
+      //soundsecond();
+      //colordark();
+      //temperature has to be in between 465 and 480 degrees farenheit, we need a function for this.
     }
   }
 }
