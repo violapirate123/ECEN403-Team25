@@ -698,7 +698,18 @@ void loop() {
       soundfirst();
       //colorlight();
       //temperature has to be in the range of 300 degrees farenheit, we need the function for this.
+     
       
+      /* sensor code idea
+      while (soundfirst == false && colorcorrect == false && temp______) 
+      {
+            soundfirst();
+            colorlight();
+            temperature_____
+      }
+      */      
+      
+     
     }
   }
   if (medium_button_state == HIGH)
