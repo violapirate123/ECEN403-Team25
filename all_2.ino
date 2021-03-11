@@ -26,7 +26,6 @@ int blueOut = 0;
 bool colorcorrect, sound1correct, sound2correct;
 
 /* Color Sensor Functions */
-
 // Color Light Roast
 bool colorlight(void) {
   uint16_t r, g, b;
@@ -46,100 +45,51 @@ bool colorlight(void) {
 
   // IF ELSE STATEMENT RED
   if (83 <= red && red <= 130)          // Not Roasted
-  {
-    redOut = 0;
-  }
+    { redOut = 0; }
   else if (131 <= red && red <= 200)    // Light Roast
-  {
-    redOut = 1;
-  }
+    { redOut = 1; }
   else if (61 <= red && red <= 82)      // Medium Roast
-  {
-    redOut = 2;
-  }
+    { redOut = 2; }
   else if (0 <= red && red <= 60)       // Dark Roast
-  {   
-    redOut = 3;
-  }
+    { redOut = 3; }
   else
-  {
-    redOut = 4;
-  }
+    { redOut = 4; }
   // IF ELSE STATEMENT GREEN
   if (83 <= green  && green <= 119)        // Not Roasted
-  {
-    greenOut = 0;
-  }
+    { greenOut = 0; }
   else if (120 <= green && green <= 200)    // Light Roast
-  {
-    greenOut = 1;
-  }
+    { greenOut = 1; }
   else if (62 <= green && green <= 82)      // Medium Roast
-  {
-    greenOut = 2;
-  }
+    { greenOut = 2; }
   else if (0 <= green && green <= 61)       // Dark Roast
-  {   
-    greenOut = 3;
-  }
+    { greenOut = 3; }
   else 
-  {
-    greenOut = 4;
-  }
-
+    { greenOut = 4; }
   // IF ELSE STATEMENT BLUE
   if (96 <= blue && blue <= 120)          // Not Roasted
-  {
-    blueOut = 0;
-  }
+    { blueOut = 0; }
   else if (121 <= blue && blue <= 200)    // Light Roast
-  {
-    blueOut = 1;
-  }
+    { blueOut = 1; }
   else if (62 <= blue && blue <= 95)      // Medium Roast
-  {
-    blueOut = 2;
-  }
+    { blueOut = 2; }
   else if (0 <= blue && blue <= 61)       // Dark Roast
-  {   
-    blueOut = 3;
-  }
+    { blueOut = 3; }
   else
-  {
-    blueOut = 4;
-  }
-
-  if (redOut == 1 &&                    // Light Roast
-      greenOut == 1 &&
-      blueOut == 1)
-  {
-    colorcorrect = true;
-  }
-  else if (redOut == 0 &&              // Light Roast (Overlapping Red with Not)
-           greenOut == 1 &&
-           blueOut == 1)
-  {
-    colorcorrect = true;       
-  }
-  else if (redOut == 1 &&              // Light Roast (Overlapping Green with Not)
-           greenOut == 0 &&
-           blueOut == 1)
-  {
-    colorcorrect = true;
-  }
-  else if (redOut == 1 &&              // Light Roast (Overlapping Blue with Not)
-           greenOut == 1 &&
-           blueOut == 0)
-  {
-    colorcorrect = true;
-  }
+    { blueOut = 4; }
+    
+  // IF ELSE STATEMENT ROAST
+  if (redOut == 1 && greenOut == 1 && blueOut == 1) // Light Roast
+    { colorcorrect = true; }
+  else if (redOut == 0 && greenOut == 1 && blueOut == 1)  // Light Roast (Overlapping Red with Not)
+    { colorcorrect = true; }
+  else if (redOut == 1 && greenOut == 0 && blueOut == 1)  // Light Roast (Overlapping Green with Not)
+    { colorcorrect = true; }
+  else if (redOut == 1 && greenOut == 1 && blueOut == 0)  // Light Roast (Overlapping Blue with Not)
+    { colorcorrect = true; }
   else
-  {
-    colorcorrect = false;
-  }
+    { colorcorrect = false; }
  }
   return colorcorrect;
- 
 }
 /*
 // Color Medium Roast
@@ -161,115 +111,54 @@ bool colormedium(void) {
 
   // IF ELSE STATEMENT RED
   if (83 <= red && red <= 130)          // Not Roasted
-  {
-    redOut = 0;
-  }
+    { redOut = 0; }
   else if (131 <= red && red <= 200)    // Light Roast
-  {
-    redOut = 1;
-  }
+    { redOut = 1; }
   else if (61 <= red && red <= 82)      // Medium Roast
-  {
-    redOut = 2;
-  }
+    { redOut = 2; }
   else if (0 <= red && red <= 60)       // Dark Roast
-  {   
-    redOut = 3;
-  }
+    { redOut = 3; }
   else
-  {
-    redOut = 4;
-  }
+    { redOut = 4; }
   // IF ELSE STATEMENT GREEN
   if (83 <= green  && green <= 119)        // Not Roasted
-  {
-    greenOut = 0;
-  }
+    { greenOut = 0; }
   else if (120 <= green && green <= 200)    // Light Roast
-  {
-    greenOut = 1;
-  }
+    { greenOut = 1; }
   else if (62 <= green && green <= 82)      // Medium Roast
-  {
-    greenOut = 2;
-  }
+    { greenOut = 2; }
   else if (0 <= green && green <= 61)       // Dark Roast
-  {   
-    greenOut = 3;
-  }
+    { greenOut = 3; }
   else 
-  {
-    greenOut = 4;
-  }
-
+    { greenOut = 4; }
   // IF ELSE STATEMENT BLUE
   if (96 <= blue && blue <= 120)          // Not Roasted
-  {
-    blueOut = 0;
-  }
+    { blueOut = 0; }
   else if (121 <= blue && blue <= 200)    // Light Roast
-  {
-    blueOut = 1;
-  }
+    { blueOut = 1; }
   else if (62 <= blue && blue <= 95)      // Medium Roast
-  {
-    blueOut = 2;
-  }
+    { blueOut = 2; }
   else if (0 <= blue && blue <= 61)       // Dark Roast
-  {   
-    blueOut = 3;
-  }
+    { blueOut = 3; }
   else
-  {
-    blueOut = 4;
-  }
-
-  if (redOut == 2 &&                    // Medium Roast
-      greenOut == 2 &&
-      blueOut == 2)
-  {
-    colorcorrect = true;
-  }
-  else if (redOut == 0 &&              // Medium Roast (Overlapping Red with Not)
-           greenOut == 2 &&
-           blueOut == 2)
-  {
-    colorcorrect = true;
-  }
-  else if (redOut == 2 &&             // Medium Roast (Overlapping Green with Not)
-           greenOut == 0 &&
-           blueOut == 2)
-  {
-    colorcorrect = true;
-  }
-  else if (redOut == 2 &&             // Medium Roast (Overlapping Blue with Not)
-           greenOut == 2 &&
-           blueOut == 0)
-  {
-    colorcorrect = 1;
-  }
-  else if (redOut == 3 &&             // Medium Roast (Overlapping Red with Dark)
-           greenOut == 2 &&
-           blueOut == 2)
-  {
-    colorcorrect = true;
-  }
-  else if (redOut == 2 &&             // Medium Roast (Overlapping Green with Dark)
-           greenOut == 3 &&
-           blueOut == 2)
-  {
-    colorcorrect = true;
-  }
-  else if (redOut == 2 &&             // Medium Roast (Overlapping Blue with Dark)
-          greenOut == 2 &&
-          blueOut == 3)
-  {
-    colorcorrect = true;
-  }
+    { blueOut = 4; }
+  // IF ELSE STATEMENT ROAST
+  if (redOut == 2 && greenOut == 2 && blueOut == 2) // Medium Roast
+    { colorcorrect = true; }
+  else if (redOut == 0 && greenOut == 2 && blueOut == 2)  // Medium Roast (Overlapping Red with Not)
+    { colorcorrect = true; }
+  else if (redOut == 2 && greenOut == 0 && blueOut == 2)  // Medium Roast (Overlapping Green with Not)
+    { colorcorrect = true; }
+  else if (redOut == 2 && greenOut == 2 && blueOut == 0)  // Medium Roast (Overlapping Blue with Not)
+    { colorcorrect = 1; }
+  else if (redOut == 3 && greenOut == 2 && blueOut == 2)  // Medium Roast (Overlapping Red with Dark)
+    { colorcorrect = true; }
+  else if (redOut == 2 && greenOut == 3 && blueOut == 2)  // Medium Roast (Overlapping Green with Dark)
+    { colorcorrect = true; }
+  else if (redOut == 2 && greenOut == 2 && blueOut == 3)  // Medium Roast (Overlapping Blue with Dark)
+    { colorcorrect = true; }
   else
-  {
-    colorcorrect = false;
-  }
+    { colorcorrect = false; }
  }
   return colorcorrect;
 }
@@ -293,98 +182,49 @@ bool colordark(void) {
 
   // IF ELSE STATEMENT RED
   if (83 <= red && red <= 130)          // Not Roasted
-  {
-    redOut = 0;
-  }
+    { redOut = 0; }
   else if (131 <= red && red <= 200)    // Light Roast
-  {
-    redOut = 1;
-  }
+    { redOut = 1; }
   else if (61 <= red && red <= 82)      // Medium Roast
-  {
-    redOut = 2;
-  }
+    { redOut = 2; }
   else if (0 <= red && red <= 60)       // Dark Roast
-  {   
-    redOut = 3;
-  }
+    { redOut = 3; }
   else
-  {
-    redOut = 4;
-  }
+    { redOut = 4; }
   // IF ELSE STATEMENT GREEN
   if (83 <= green  && green <= 119)        // Not Roasted
-  {
-    greenOut = 0;
-  }
+    { greenOut = 0; }
   else if (120 <= green && green <= 200)    // Light Roast
-  {
-    greenOut = 1;
-  }
+    { greenOut = 1; }
   else if (62 <= green && green <= 82)      // Medium Roast
-  {
-    greenOut = 2;
-  }
+    { greenOut = 2; }
   else if (0 <= green && green <= 61)       // Dark Roast
-  {   
-    greenOut = 3;
-  }
+    { greenOut = 3; }
   else 
-  {
-    greenOut = 4;
-  }
-
+    { greenOut = 4; }
   // IF ELSE STATEMENT BLUE
   if (96 <= blue && blue <= 120)          // Not Roasted
-  {
-    blueOut = 0;
-  }
+    { blueOut = 0; }
   else if (121 <= blue && blue <= 200)    // Light Roast
-  {
-    blueOut = 1;
-  }
+    { blueOut = 1; }
   else if (62 <= blue && blue <= 95)      // Medium Roast
-  {
-    blueOut = 2;
-  }
+    { blueOut = 2; }
   else if (0 <= blue && blue <= 61)       // Dark Roast
-  {   
-    blueOut = 3;
-  }
+    { blueOut = 3; }
   else
-  {
-    blueOut = 4;
-  }
-
-  if (redOut == 3 &&                  // Dark Roast
-      greenOut == 3 &&
-      blueOut == 3)
-  {
-    colorcorrect = true;
-  }
-
-  else if (redOut == 2 &&             // Dark Roast (Overlapping Red with Medium)
-           greenOut == 3 &&
-           blueOut == 3)
-  {
-    colorcorrect = true;
-  }
-  else if (redOut == 3 &&             // Dark Roast (Overlapping Green with Medium)
-           greenOut == 2 &&
-           blueOut == 3)
-  {
-    colorcorrect = true;
-  }
-  else if (redOut == 3 &&            // Dark Roast (Overlapping Blue with Medium)
-           greenOut == 3 &&
-           blueOut == 2)
-  {
-    colorcorrect = true;
-  }
+    { blueOut = 4; }
+  
+  // IF ELSE STATEMENT ROAST
+  if (redOut == 3 && greenOut == 3 && blueOut == 3) // Dark Roast
+    { colorcorrect = true; }
+  else if (redOut == 2 && greenOut == 3 && blueOut == 3)  // Dark Roast (Overlapping Red with Medium)
+    { colorcorrect = true; }
+  else if (redOut == 3 && greenOut == 2 && blueOut == 3)  // Dark Roast (Overlapping Green with Medium)
+    { colorcorrect = true; }
+  else if (redOut == 3 && greenOut == 3 && blueOut == 2)  // Dark Roast (Overlapping Blue with Medium)
+    { colorcorrect = true; }
   else
-  {
-    colorcorrect = false;
-  }
+    { colorcorrect = false; }
  }
   return colorcorrect;
 }
@@ -405,110 +245,54 @@ void coffeebeansdetected(void) {
 
   // IF ELSE STATEMENT RED
   if (83 <= red && red <= 130)          // Not Roasted
-  {
-    redOut = 0;
-  }
+    { redOut = 0; }
   else if (131 <= red && red <= 200)    // Light Roast
-  {
-    redOut = 1;
-  }
+    { redOut = 1; }
   else if (61 <= red && red <= 82)      // Medium Roast
-  {
-    redOut = 2;
-  }
+    { redOut = 2; }
   else if (0 <= red && red <= 60)       // Dark Roast
-  {   
-    redOut = 3;
-  }
+    { redOut = 3; }
   else
-  {
-    redOut = 4;
-  }
+    { redOut = 4; }
   // IF ELSE STATEMENT GREEN
   if (83 <= green  && green <= 119)        // Not Roasted
-  {
-    greenOut = 0;
-  }
+    { greenOut = 0; }
   else if (120 <= green && green <= 200)    // Light Roast
-  {
-    greenOut = 1;
-  }
+    { greenOut = 1; }
   else if (62 <= green && green <= 82)      // Medium Roast
-  {
-    greenOut = 2;
-  }
+    { greenOut = 2; }
   else if (0 <= green && green <= 61)       // Dark Roast
-  {   
-    greenOut = 3;
-  }
+    { greenOut = 3; }
   else 
-  {
-    greenOut = 4;
-  }
-
+    { greenOut = 4; }
   // IF ELSE STATEMENT BLUE
   if (96 <= blue && blue <= 120)          // Not Roasted
-  {
-    blueOut = 0;
-  }
+    { blueOut = 0; }
   else if (121 <= blue && blue <= 200)    // Light Roast
-  {
-    blueOut = 1;
-  }
+    { blueOut = 1; }
   else if (62 <= blue && blue <= 95)      // Medium Roast
-  {
-    blueOut = 2;
-  }
+    { blueOut = 2; }
   else if (0 <= blue && blue <= 61)       // Dark Roast
-  {   
-    blueOut = 3;
-  }
+    { blueOut = 3; }
   else
-  {
-    blueOut = 4;
-  }
-
+    { blueOut = 4; }
 
   // IF ELSE STATEMENT ROAST
-  if (redOut == 0 && greenOut == 0 && blueOut == 0)                 // Not Roasted
-  {
-    return;    
-  }
-  else if (redOut == 1 &&              // Not Roasted (Overlapping Red with Light)
-           greenOut == 0 &&
-           blueOut == 0)
-  {
-    return; 
-  }
-  else if (redOut == 0 &&              // Not Roasted (Overlapping Green with Light)
-           greenOut == 1 &&
-           blueOut == 0)
-  {
-    Serial.print("Not Roasted\n");
-  }
-  else if (redOut == 0 &&              // Not Roasted (Overlapping Blue with Light)
-           greenOut == 0 &&
-           blueOut == 1)
-  {
-    return; 
-  }
-  else if (redOut == 2 &&              // Not Roasted (Overlapping Red with Medium)
-           greenOut == 0 &&
-           blueOut == 0)
-  {
-    return; 
-  }
-  else if (redOut == 0 &&              // Not Roasted (Overlapping Blue with Medium)
-           greenOut == 0 &&
-           blueOut == 2)
-  {
-    return; 
-  }
+  if (redOut == 0 && greenOut == 0 && blueOut == 0) // Not Roasted
+    { return; }
+  else if (redOut == 1 && greenOut == 0 && blueOut == 0)  // Not Roasted (Overlapping Red with Light)
+    { return; }
+  else if (redOut == 0 && greenOut == 1 && blueOut == 0)  // Not Roasted (Overlapping Green with Light)
+    { return; }
+  else if (redOut == 0 && greenOut == 0 && blueOut == 1)  // Not Roasted (Overlapping Blue with Light)
+    { return; }
+  else if (redOut == 2 && greenOut == 0 && blueOut == 0)  // Not Roasted (Overlapping Red with Medium)
+    { return; }
+  else if (redOut == 0 && greenOut == 0 && blueOut == 2)  // Not Roasted (Overlapping Blue with Medium)
+    { return; }
   else
-  {
-    delay(5000);
-    coffeebeansdetected();
-  }
+    { delay(5000);
+      coffeebeansdetected(); }
 }
 /* Color Sensor Functions End */
 
