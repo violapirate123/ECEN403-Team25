@@ -562,20 +562,17 @@ void loop() {
       if (temp == 200){ //we can mess with this i needed a place holder to turn off the wire
         digitalWrite(wire, LOW);
       }
-      soundfirst();
-      //colorlight();
-      //temperature has to be in the range of 300 degrees farenheit, we need the function for this.
-     
-      
-      /* sensor code idea
-      while (soundfirst == false && colorcorrect == false && temp______) 
-      {
-            soundfirst();
-            colorlight();
-            temperature_____
+      /*
+      if (temp >= ____) {
+        while (soundfirst == false && colorcorrect == false)
+        {
+          soundfirst();
+          //colorlight();
+          //temperature has to be in the range of 300 degrees farenheit, we need the function for this.
+        }
       }
-      */      
-      
+      //if ( (temp && sound == true) || ((temp && color == true))
+      */
      
     }
   }
