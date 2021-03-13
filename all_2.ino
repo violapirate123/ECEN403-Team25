@@ -96,19 +96,15 @@ bool colorlight(void) {
 bool colormedium(void) {
   uint16_t r, g, b;
   tcs.getRawData(&r, &g, &b); // Getting RGB Values
-
   // Convert to RGB values
   int redV = map(r, redlow, redhigh, 0, 255);
   int greenV = map(g, greenlow, greenhigh, 0, 255);
   int blueV = map(b, bluelow, bluehigh, 0, 255);
-
   // Constrain to values of 0-65535
   red = constrain(redV, 0, 255);
   green = constrain(greenV, 0, 255);
   blue = constrain(blueV, 0, 255);
-
   while(colorcorrect == false){
-
   // IF ELSE STATEMENT RED
   if (83 <= red && red <= 130)          // Not Roasted
     { redOut = 0; }
@@ -167,19 +163,15 @@ bool colormedium(void) {
 bool colordark(void) {
   uint16_t r, g, b;
   tcs.getRawData(&r, &g, &b); // Getting RGB Values
-
   // Convert to RGB values
   int redV = map(r, redlow, redhigh, 0, 255);
   int greenV = map(g, greenlow, greenhigh, 0, 255);
   int blueV = map(b, bluelow, bluehigh, 0, 255);
-
   // Constrain to values of 0-65535
   red = constrain(redV, 0, 255);
   green = constrain(greenV, 0, 255);
   blue = constrain(blueV, 0, 255);
-
   while(colorcorrect == false){
-
   // IF ELSE STATEMENT RED
   if (83 <= red && red <= 130)          // Not Roasted
     { redOut = 0; }
