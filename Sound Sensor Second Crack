@@ -3,6 +3,7 @@
 #define Sampling_Frequency 32000 //needs to be twice the number of the maximum frequency expected to detect.
 #include <ExtendedADCShield.h>
 arduinoFFT FFT = arduinoFFT(); //performs FFT from ADC data collected from microphone.
+ExtendedADCShield extendedADCShield(12);
 
 unsigned int samplingprd; //period of sampling for microprocessor.
 unsigned long microsec; //unit used for sampling time.
