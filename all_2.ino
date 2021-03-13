@@ -314,6 +314,108 @@ float get_temp(float voltage){ //turned voltage to temp
   return (voltage - .5) / .01;
 }
 
+/* Sound Sensor */
+#include "arduinoFFT.h" 
+#define Sampling_Frequency 2048
+
+arduinoFFT FFT = arduinoFFT();
+
+unsigned int samplingprd;
+unsigned long microsec;
+int CrackSensor = A0; // assigns crack sensor circuit to analog pin 1.
+int FirstCrack = 3; // assigns output signal for first crack to digital pin 3.
+int SecondCrack = 4; //assigns output signal for second crack to digital pin 4.
+bool firstcrackregistered = false; // boolean that is set to true once the coffee roasting process is in the "First crack stage".
+bool secondcrackregistered = false; // boolean that is set to true once the coffee roasting process is in the "Second crack stage".
+int crackcount = 0; //integer value to count for number of crack sounds.
+int secondcrackcount = 0; //integer value to count for number of crack sounds at second crack.
+double imaginary[128];
+double data[128];
+int i = 0;
+int value;
+/* Sound Sensor End */
+
+/* Sound Sensor Functions */
+bool soundfirst(void) {
+  Serial.begin(9600);
+  for (i = 0;i < 128; i++){//loops 128 times to take 128 samples of ADC from electret microphone.
+    microsec = micros();// sets microsec variable to the amount of time processor takes to process information.
+   value = analogRead(CrackSensor);//takes sound sensor data and assigns it to premade variable "value".
+   data[i] = value;// places the analog to digital values in the array "data"
+   imaginary[i] = 0; //sets imaginary values to 0.
+   while(micros() < (microsec + samplingprd)){//allows for a fixed sampling time depending on speed of microprocessor.
+    //dont take samples while this is happening to allow processing time to catch up to sampling data.
+   }
+  }
+  FFT.Windowing(data, 128, FFT_WIN_TYP_HAMMING, FFT_FORWARD);//first part of FFT 
+  FFT.Compute(data, imaginary, 128, FFT_FORWARD);//computational part of FFT
+  FFT.ComplexToMagnitude(data, imaginary, 128);//complex magnitude part of FFT
+
+  double peak = FFT.MajorPeak(data, 128, Sampling_Frequency);//the peak found by the transform is set equal to "peak" variable.
+  Serial.println(peak);//this code is to test peaks
+  delay(2000);//delay to observe output well.
+  while(firstcrackregistered == false){
+  if((800 <= peak)&&(1000 >= peak)){ // registers a specific frequency that is converted to a digital number and identifies the crack sound.
+    crackcount = crackcount + 1; //increments value of crack sound number everytime desired frequency is detected by the microcontroller.
+  }
+  else{ //else statement to keep count for first crack the same.
+    crackcount = crackcount; //keeps the count for firstcrack the same.
+  }
+  if(crackcount >= 7){ // if 7 CLEAR cracks are heard, the boolean "firstcrackregistered" is set to true.
+    firstcrackregistered = true; //boolean is set to true with given condition.
+  }
+  if(firstcrackregistered){ //first crack is successfully registered.
+  digitalWrite(FirstCrack, HIGH); // LED for first crack stays constantly on when the boolean for first crack is set to true.
+  } 
+
+  else{ // else statement when first crack boolean is set to false.
+  digitalWrite(FirstCrack, LOW); //keeps the LED for first crack on while the boolean for first crack remains false.
+  }
+ }
+  return firstcrackregistered;
+}
+
+bool soundsecond(void) {
+  Serial.begin(9600);
+  for (i = 0;i < 128; i++){//loops 128 times to take 128 samples of ADC from electret microphone.
+    microsec = micros();// sets microsec variable to the amount of time processor takes to process information.
+   value = analogRead(CrackSensor);//takes sound sensor data and assigns it to premade variable "value".
+   data[i] = value;// places the analog to digital values in the array "data"
+   imaginary[i] = 0; //sets imaginary values to 0.
+   while(micros() < (microsec + samplingprd)){//allows for a fixed sampling time depending on speed of microprocessor.
+    //dont take samples while this is happening to allow processing time to catch up to sampling data.
+   }
+  }
+  FFT.Windowing(data, 128, FFT_WIN_TYP_HAMMING, FFT_FORWARD);//first part of FFT 
+  FFT.Compute(data, imaginary, 128, FFT_FORWARD);//computational part of FFT
+  FFT.ComplexToMagnitude(data, imaginary, 128);//complex magnitude part of FFT
+
+  double peak = FFT.MajorPeak(data, 128, Sampling_Frequency);//the peak found by the transform is set equal to "peak" variable.
+  Serial.println(peak);//this code is to test peaks
+  delay(2000);//delay to observe output well.
+  while(secondcrackregistered == false){
+  if((14000 <= peak)&&(15500 >= peak)){ // registers a specific frequency that is converted to a digital number and identifies the crack sound.
+    secondcrackcount = secondcrackcount + 1; //increments value of crack sound number everytime desired frequency is detected by the microcontroller.
+  }
+  else{ //else statement to keep count for first crack the same.
+    secondcrackcount = secondcrackcount; //keeps the count for firstcrack the same.
+  }
+  if(crackcount >= 7){ // if 7 CLEAR cracks are heard, the boolean "firstcrackregistered" is set to true.
+    secondcrackregistered = true; //boolean is set to true with given condition.
+  }
+  if(secondcrackregistered){ //first crack is successfully registered.
+  digitalWrite(SecondCrack, HIGH); // LED for first crack stays constantly on when the boolean for first crack is set to true.
+  } 
+
+  else{ // else statement when first crack boolean is set to false.
+  digitalWrite(SecondCrack, LOW); //keeps the LED for first crack on while the boolean for first crack remains false.
+  }
+ }
+  return secondcrackregistered;
+}
+/* Sound Sensor Functions End */
+
+
 
 void setup() {
   // put your setup code here, to run once:
@@ -322,6 +424,12 @@ void setup() {
   pinMode(dark_button, INPUT);
   pinMode(wire, OUTPUT);
 
+    /* Sound Sensor Set Up */
+  samplingprd = round(1000000*(1/Sampling_Frequency));
+  pinMode (CrackSensor, INPUT); // sets crack sensor as input.
+  pinMode (FirstCrack, OUTPUT);// sets firstcrack signal as output.
+  pinMode (SecondCrack, OUTPUT); // sets secondcrack signal as output.
+  /* Sound Sensor Set Up End */
 
   /*Color Sensor Set Up*/
   /*// Check if Color Sensor Connected
@@ -362,7 +470,7 @@ void loop() {
       temp = get_temp(voltage);
       if (temp == 200){ //we can mess with this i needed a place holder to turn off the wire
         digitalWrite(wire, LOW);
-      }
+      }   
       /*
       if (temp >= ____) {
         while (soundfirst == false && colorcorrect == false)
