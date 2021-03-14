@@ -41,6 +41,12 @@ bool colorlight(void) {
   green = constrain(greenV, 0, 255);
   blue = constrain(blueV, 0, 255);
   
+  // Printing RGB Values
+  Serial.print("R: "); Serial.print(red, DEC); Serial.print(" ");
+  Serial.print("G: "); Serial.print(green, DEC); Serial.print(" ");
+  Serial.print("B: "); Serial.print(blue, DEC); Serial.print(" ");
+  Serial.println(" ");
+  
   while(colorcorrect == false){
 
   // IF ELSE STATEMENT RED
