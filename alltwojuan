@@ -376,11 +376,11 @@ bool soundfirst(void) {
   FFT.ComplexToMagnitude(data, imaginary, 128);//complex magnitude part of FFT
 
   
-  
-  /*Serial.println(" ");
+ 
   for (i = 0;i < 128; i++){
   Serial.println(data[i]);
-  */
+  }
+  
    
   
    for (i = 0;i < 128; i++){
@@ -442,10 +442,10 @@ bool soundsecond(void) {
   double peak = FFT.MajorPeak(data, 128, Sampling_Frequency);//the peak found by the transform is set equal to "peak" variable.
  // Serial.println(peak);//this code is to test peaks
   Serial.println(" ");
-  for (i = 0;i < 128; i++){
+  /*for (i = 0;i < 128; i++){
    Serial.println(data[i]);
    
-  }
+  }*/
    for (i = 0;i < 128; i++){
   if((14300 <= data[i])&&(15600 >= data[i])){ // registers a specific frequency that is converted to a digital number and identifies the crack sound.
     crackcount = crackcount + 1; //increments value of crack sound number everytime desired frequency is detected by the microcontroller.
@@ -525,7 +525,7 @@ void loop() {
       if (temp >= 315F) {}*/
         while (soundfirst() == false && colorlight() == false)
         {
-          //soundfirst();
+          soundfirst();
           colorlight();
           //temperature has to be in the range of 300 degrees farenheit, we need the function for this.
         }
