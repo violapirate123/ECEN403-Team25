@@ -476,11 +476,13 @@ void loop() {
         while (soundfirst == false || colorcorrect == false)
         {
           soundfirst();
-          //colorlight();
+          colorlight();
           //temperature has to be in the range of 300 degrees farenheit, we need the function for this.
         }
       }
-      //if ( (temp && sound == true) || ((temp && color == true))
+      //if ( (temp && soundfirst == true) || (temp && colorlight == true) || (soundfirst && colorlight == true))
+      {
+        //end heating and begin cool down
       */
      
     }
