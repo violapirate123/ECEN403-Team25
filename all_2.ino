@@ -473,7 +473,7 @@ void loop() {
       }   
       /*
       if (temp >= ____) {
-        while (soundfirst == false && colorcorrect == false)
+        while (soundfirst == false || colorcorrect == false)
         {
           soundfirst();
           //colorlight();
