@@ -347,7 +347,6 @@ int ema_T = 0;        //initialization of ema T, used for High pass filter.
 
 /* Sound Sensor Functions */
 bool soundfirst(void) {
-  
   unsigned long microsec; //unit used for sampling time.
   bool firstcrackregistered = false; // boolean that is set to true once the coffee roasting process is in the "First crack stage".
   int crackcount = 0; //integer value to count for number of crack sounds.
@@ -370,8 +369,6 @@ bool soundfirst(void) {
   lowpassfilter = ema_S; //create lowpassfilter.
   ema_T = (ema_b*lowpassfilter) + ((1-ema_b)*ema_T);
   filteredsignal = lowpassfilter - ema_T;
-  
-  
 
   for (i = 0;i < 128; i++){//loops 128 times to take 128 samples of ADC from electret microphone.
     microsec = micros();// sets microsec variable to the amount of time processor takes to process information.
@@ -386,15 +383,10 @@ bool soundfirst(void) {
   FFT.Windowing(data, 128, FFT_WIN_TYP_HAMMING, FFT_FORWARD);//first part of FFT 
   FFT.Compute(data, imaginary, 128, FFT_FORWARD);//computational part of FFT
   FFT.ComplexToMagnitude(data, imaginary, 128);//complex magnitude part of FFT
-
-  
  
   for (i = 0;i < 128; i++){
   Serial.println(data[i]);
   }
-  
-   
-  
    for (i = 0;i < 128; i++){
   if((750 <= data[i])&&(980 >= data[i])){ // registers a specific frequency that is converted to a digital number and identifies the crack sound.
     crackcount = crackcount + 1; //increments value of crack sound number everytime desired frequency is detected by the microcontroller.
@@ -411,7 +403,6 @@ bool soundfirst(void) {
 }
 
 bool soundsecond(void) {
-
   unsigned long microsec; //unit used for sampling time.
   bool secondcrackregistered = false; // boolean that is set to true once the coffee roasting process is in the "First crack stage".
   int crackcount = 0; //integer value to count for number of crack sounds.
@@ -433,8 +424,6 @@ bool soundsecond(void) {
   ema_T = (ema_b*lowpassfilter) + ((1-ema_b)*ema_T);
   filteredsignal = lowpassfilter - ema_T;
   
-  
-
   for (i = 0;i < 128; i++){//loops 128 times to take 128 samples of ADC from electret microphone.
    microsec = micros();// sets microsec variable to the amount of time processor takes to process information.
    value = analogRead(filteredsignal);//takes sound sensor data and assigns it to premade variable "value".
@@ -449,14 +438,11 @@ bool soundsecond(void) {
   FFT.Compute(data, imaginary, 128, FFT_FORWARD);//computational part of FFT
   FFT.ComplexToMagnitude(data, imaginary, 128);//complex magnitude part of FFT
 
-  
-  
   double peak = FFT.MajorPeak(data, 128, Sampling_Frequency);//the peak found by the transform is set equal to "peak" variable.
  // Serial.println(peak);//this code is to test peaks
   Serial.println(" ");
   /*for (i = 0;i < 128; i++){
    Serial.println(data[i]);
-   
   }*/
    for (i = 0;i < 128; i++){
   if((14300 <= data[i])&&(15600 >= data[i])){ // registers a specific frequency that is converted to a digital number and identifies the crack sound.
@@ -468,10 +454,7 @@ bool soundsecond(void) {
   if(crackcount >= 7){ // if 7 CLEAR cracks are heard, the boolean "firstcrackregistered" is set to true.
     secondcrackregistered = true; //boolean is set to true with given condition.
   }
-  
 }
-   
-  
    return secondcrackregistered;
 }
 /* Sound Sensor Functions End */
@@ -552,9 +535,6 @@ void loop() {
        //maximum temperature for light roast
        //call cooldown function
   //     }*/
-       
-      
-     
     }
   }
 
@@ -590,10 +570,10 @@ void loop() {
         maximum temperature for medium roasts
         call cooldown function
        }*/
-       
-      
     }
   }
+  
+  
   if (dark_button_state == HIGH)
   {
     coffeebeansdetected();
