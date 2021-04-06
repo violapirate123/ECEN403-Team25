@@ -18,3 +18,4 @@ void loop() {
   }
 
 }
+// to stop motor you need digitalWrite(driverpin,LOW), I dont think you need a function for this, can be placed in the main code after roast is completed.
