@@ -14,6 +14,28 @@
 /* Initialise with specific int time and gain values */
 Adafruit_TCS34725 tcs = Adafruit_TCS34725(TCS34725_INTEGRATIONTIME_700MS, TCS34725_GAIN_1X);
 
+
+/*// Calibration values
+unsigned int redlow = 504;
+unsigned int redhigh = 1236;
+unsigned int greenlow = 380;
+unsigned int greenhigh = 1244;
+unsigned int bluelow = 354;
+unsigned int bluehigh = 1293;
+
+// Declare RGB Values
+int red = 0;
+int green = 0;
+int blue = 0;
+
+int redOut = 0;
+int greenOut = 0;
+int blueOut = 0;
+*/
+
+
+
+
 void setup(void) {
   Serial.begin(9600);
 
@@ -42,4 +64,23 @@ void loop(void) {
   Serial.print("B: "); Serial.print(b, DEC); Serial.print(" ");
   Serial.print("C: "); Serial.print(c, DEC); Serial.print(" ");
   Serial.println(" ");
+  
+  
+  /*
+  // Convert to RGB values
+  int redV = map(r, redlow, redhigh, 0, 255);
+  int greenV = map(g, greenlow, greenhigh, 0, 255);
+  int blueV = map(b, bluelow, bluehigh, 0, 255);
+
+  // Constrain to values of 0-65535
+  red = constrain(redV, 0, 255);
+  green = constrain(greenV, 0, 255);
+  blue = constrain(blueV, 0, 255);
+  
+  // Printing RGB Values
+  Serial.print("R: "); Serial.print(red, DEC); Serial.print(" ");
+  Serial.print("G: "); Serial.print(green, DEC); Serial.print(" ");
+  Serial.print("B: "); Serial.print(blue, DEC); Serial.print(" ");
+  Serial.println(" ");
+  */
 }
