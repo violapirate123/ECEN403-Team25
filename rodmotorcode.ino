@@ -17,4 +17,4 @@ void loop() {
     delayMicroseconds(1); //very small delay for maximum speed,it can be adjusted if you find issues.
   }
 
-}
+}// to stop motor you need digitalWrite(driverpin,LOW), I dont think you need a function for this, can be placed in the main code after roast is completed.
