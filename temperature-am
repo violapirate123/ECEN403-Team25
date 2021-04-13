@@ -1,0 +1,13 @@
+int temperaturepwm = 11; // sets pwm signal to pin 11.
+int temperatureon = 255; //equal to duty cycle below maximum value but enough to produce light roast temperature.
+int temperatureoff = 0;
+
+void setup() {
+  //pinMode(temperaturepwm,OUTPUT); //sets pwm variable as output.
+
+}
+
+void loop() {
+  analogWrite(temperaturepwm,temperatureon); //writes duty cycle on the pwm variable, causes heating of nichrome wire to be for light roast.
+  //analogWrite(temperaturepwm,temperatureoff);
+}
