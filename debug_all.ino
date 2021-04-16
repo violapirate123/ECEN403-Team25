@@ -294,7 +294,10 @@ void coffeebeansdetected(void) {
 }
 /* Color Sensor Functions End */
 
-
+/* Heat Sensor */
+int temperaturepwm = 11; // sets pwm signal to pin 11.
+int temperatureon = 255; //equal to duty cycle below maximum value but enough to produce light roast temperature.
+int temperatureoff = 0;
 
 /*BUTTON SET UP */
 const int light_button = 2; //set button pin
@@ -509,7 +512,7 @@ void loop() {
      coffeebeansdetected();
     while (light_button_state == HIGH){ //keep button on
       digitalWrite(wire, HIGH); //turns on wire
-      //temp
+      analogWrite(temperaturepwm,temperatureon);   // Turn on heating
       //reading = analogRead(TC_Pin);
       //voltage = get_voltage(reading);
       //temp = get_temp(voltage);
@@ -526,7 +529,7 @@ void loop() {
       
       if ((tempsense() == true && soundfirst() == true) || (tempsense() == true && colorlight() == true)){
         //stop motor movement and temperature movement.
-        //Light roast is done
+        analogWrite(temperaturepwm,temperatureoff);   // Turn off heating
         //call cooldown function
         
        }
@@ -544,7 +547,7 @@ void loop() {
     coffeebeansdetected();
     while (medium_button_state == HIGH){ //keep button on
       digitalWrite(wire, HIGH); //turns on wire
-      //temp
+      analogWrite(temperaturepwm,temperatureon);   // Turn on heating
       /*reading = analogRead(TC_Pin);
       voltage = get_voltage(reading);
       temp = get_temp(voltage);
@@ -562,7 +565,7 @@ void loop() {
        
        if ((tempsense() == true && soundfirst() == true) || (tempsense() == true && colormedium() == true)){
         //stop motor movement and temperature.
-        //Medium roast is done
+        analogWrite(temperaturepwm,temperatureoff);  // Turn off heating
         //call cooldown function
        }
      /*  if (temp > 428F){
@@ -579,11 +582,11 @@ void loop() {
     coffeebeansdetected();
     while (dark_button_state == HIGH){ //keep button on
       digitalWrite(wire, HIGH); //turns on wire
-      //temp
+      analogWrite(temperaturepwm,temperatureon);   // Turn on heating
       //reading = analogRead(TC_Pin);
       //voltage = get_voltage(reading);
       //temp = get_temp(voltage);
-      while ((soundfirst() == false && colordark() == false) || (soundfirst() == false && tempsense() == false) || (colordark() == false && tempsense() == false))
+      while ((soundsecond() == false && colordark() == false) || (soundsecond() == false && tempsense() == false) || (colordark() == false && tempsense() == false))
         {
           soundfirst();
           colordark();
@@ -592,6 +595,12 @@ void loop() {
         }
         digitalWrite(wire, LOW);
       }
+    
+      if ((tempsense() == true && soundsecond() == true) || (tempsense() == true && colordark() == true)){
+        //stop motor movement and temperature.
+        analogWrite(temperaturepwm,temperatureoff);  // Turn off heating
+        //call cooldown function
+       }
        /*while ((soundfirst() == false) && (temp < 350F))
        {
           //soundfirst();
