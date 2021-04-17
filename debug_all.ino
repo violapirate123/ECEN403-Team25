@@ -144,6 +144,7 @@ bool colormedium(void) {
     { blueOut = 3; }
   else
     { blueOut = 4; }
+    
   // IF ELSE STATEMENT ROAST
   if (redOut == 2 && greenOut == 2 && blueOut == 2) // Medium Roast
     { colorcorrect = true; }
@@ -298,7 +299,6 @@ void coffeebeansdetected(void) {
 int temperaturepwm = 11; // sets pwm signal to pin 11.
 int temperatureon = 255; //equal to duty cycle below maximum value but enough to produce light roast temperature.
 int temperatureoff = 0;
-analogWrite(temperaturepwm,temperatureoff);
 
 /*BUTTON SET UP */
 const int light_button = 2; //set button pin
@@ -478,21 +478,9 @@ void setup() {
     ema_S = analogRead(CrackSensor); //initialize one of the variables required for lowpass filtering
     ema_T = analogRead(CrackSensor); //initialize one of th variables required for highpass filtering
     /* Sound Sensor Function Set Up End */
-
-    /*Color Sensor Set Up*/
-    /*// Check if Color Sensor Connected
-    if (tcs.begin()) 
-    {  // Checking if sensor is connected
-      Serial.println("Sensor Connected");
-    } 
-    else 
-    {
-    Serial.println("Sensor NOT Connected");
-    while (1);
-    }
-    // Check if Color Sensor Connected End
-    /* Color Sensor Set Up End*/
-
+  
+    // Heating System Start Off
+    analogWrite(temperaturepwm,temperatureoff);
 
   //temp
   Serial.begin(9600);
@@ -533,11 +521,6 @@ void loop() {
         //call cooldown function
         
        }
-//       if (temp > 350){
-       //stop motor and temperature
-       //maximum temperature for light roast
-       //call cooldown function
-  //     }*/
     }
   }
 
@@ -568,11 +551,6 @@ void loop() {
         analogWrite(temperaturepwm,temperatureoff);  // Turn off heating
         //call cooldown function
        }
-     /*  if (temp > 428F){
-        stop motor movement and temperature. 
-        maximum temperature for medium roasts
-        call cooldown function
-       }*/
     }
   }
   
@@ -601,17 +579,6 @@ void loop() {
         analogWrite(temperaturepwm,temperatureoff);  // Turn off heating
         //call cooldown function
        }
-       /*while ((soundfirst() == false) && (temp < 350F))
-       {
-          //soundfirst();
-          //keep increasing temperature
-       } 
-       if((soundfirst())
-       
-      //soundfirst();
-      //soundsecond();
-      //colordark();
-      //temperature has to be in between 465 and 480 degrees farenheit, we need a function for this.
-    }*/
+    }
   }
 }
