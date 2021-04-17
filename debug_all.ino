@@ -294,10 +294,11 @@ void coffeebeansdetected(void) {
 }
 /* Color Sensor Functions End */
 
-/* Heat Sensor */
+/* Heating System Setup */
 int temperaturepwm = 11; // sets pwm signal to pin 11.
 int temperatureon = 255; //equal to duty cycle below maximum value but enough to produce light roast temperature.
 int temperatureoff = 0;
+analogWrite(temperaturepwm,temperatureoff);
 
 /*BUTTON SET UP */
 const int light_button = 2; //set button pin
@@ -309,7 +310,6 @@ int medium_button_state = 0;
 int dark_button_state = 0;
 
 /*TEMP SET UP */
-
 int TC_Pin = A1; //analog to digital converter
 int raw_adc = 0;
 #define AREF 3.3 // voltage used by amplifier
@@ -608,7 +608,6 @@ void loop() {
        } 
        if((soundfirst())
        
-
       //soundfirst();
       //soundsecond();
       //colordark();
