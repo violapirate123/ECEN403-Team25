@@ -441,7 +441,7 @@ bool soundsecond(void) {
   FFT.Compute(data, imaginary, 128, FFT_FORWARD);//computational part of FFT
   FFT.ComplexToMagnitude(data, imaginary, 128);//complex magnitude part of FFT
 
-  double peak = FFT.MajorPeak(data, 128, Sampling_Frequency);//the peak found by the transform is set equal to "peak" variable.
+  double peak = FFT.MajorPeak(data, 128, Sampling_Frequency2);//the peak found by the transform is set equal to "peak" variable.
  // Serial.println(peak);//this code is to test peaks
   Serial.println(" ");
   /*for (i = 0;i < 128; i++){
