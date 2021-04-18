@@ -432,7 +432,7 @@ bool soundsecond(void) {
    value = analogRead(filteredsignal);//takes sound sensor data and assigns it to premade variable "value".
    data[i] = value;// places the analog to digital values in the array "data"
    imaginary[i] = 0; //sets imaginary values to 0.
-   while(micros() < (microsec + samplingprd)){//allows for a fixed sampling time depending on speed of microprocessor.
+   while(micros() < (microsec + samplingprd2)){//allows for a fixed sampling time depending on speed of microprocessor.
     //dont take samples while this is happening to allow processing time to catch up to sampling data.
    }
   }
